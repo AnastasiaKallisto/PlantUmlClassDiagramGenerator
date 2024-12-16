@@ -65,7 +65,7 @@ public class RelationshipCollection : IEnumerable<Relationship>
         if (node.Declaration.Type is not SimpleNameSyntax leafNode 
             || node.Parent is not BaseTypeDeclarationSyntax rootNode) return;
 
-        var symbol = field.Initializer == null ? "-->" : "o->";
+        var symbol = field.Initializer == null ? "-->" : "o--";
         var fieldIdentifier = field.Identifier.ToString();
         var leafName = TypeNameText.From(leafNode);
         var rootName = TypeNameText.From(rootNode);
@@ -77,7 +77,7 @@ public class RelationshipCollection : IEnumerable<Relationship>
         if (node.Declaration.Type is not SimpleNameSyntax leafNode 
             || node.Parent is not BaseTypeDeclarationSyntax rootNode) return;
 
-        var symbol = field.Initializer == null ? "-->" : "o->";
+        var symbol = field.Initializer == null ? "-->" : "o--";
         var leafName = TypeNameText.From(leafNode);
         var rootName = TypeNameText.From(rootNode);
         AddRelationship(leafName, rootName, symbol, "");
@@ -88,7 +88,7 @@ public class RelationshipCollection : IEnumerable<Relationship>
         if (typeIgnoringNullable is not SimpleNameSyntax leafNode 
             || node.Parent is not BaseTypeDeclarationSyntax rootNode) return;
 
-        var symbol = node.Initializer == null ? "-->" : "o->";
+        var symbol = node.Initializer == null ? "-->" : "o--";
         var nodeIdentifier = node.Identifier.ToString();
         var leafName = TypeNameText.From(leafNode);
         var rootName = TypeNameText.From(rootNode);
@@ -100,7 +100,7 @@ public class RelationshipCollection : IEnumerable<Relationship>
         if (typeIgnoringNullable is not SimpleNameSyntax leafNode 
             || node.Parent is not BaseTypeDeclarationSyntax rootNode) return;
 
-        var symbol = node.Initializer == null ? "-->" : "o->";
+        var symbol = node.Initializer == null ? "-->" : "o--";
         var leafName = TypeNameText.From(leafNode);
         var rootName = TypeNameText.From(rootNode);
         AddRelationship(leafName, rootName, symbol, "");
@@ -111,7 +111,7 @@ public class RelationshipCollection : IEnumerable<Relationship>
         if (node.Type is not SimpleNameSyntax leafNode 
             || parent is not BaseTypeDeclarationSyntax rootNode) return;
 
-        var symbol = node.Default == null ? "-->" : "o->";
+        var symbol = node.Default == null ? "-->" : "o--";
         var nodeIdentifier = node.Identifier.ToString();
         var leafName = TypeNameText.From(leafNode);
         var rootName = TypeNameText.From(rootNode);
@@ -135,6 +135,38 @@ public class RelationshipCollection : IEnumerable<Relationship>
         if (leafName is null) { return; }
         var rootName = TypeNameText.From(rootNode);
         AddRelationship(attribute, leafName, rootName);
+    }
+
+    public void AddAssociationFrom(MethodDeclarationSyntax node, ParameterSyntax parameter)
+    {
+        if (node.Parent is not BaseTypeDeclarationSyntax rootNode) return;
+        var symbol = ".[#blue,thickness=3].>";
+        TypeNameText leafName = null;
+        var leafIdentifier = parameter.Type.ToString();
+        if (Enum.TryParse(leafIdentifier, out IgnoredTypes _)
+            || Enum.TryParse(CapitalizeFirstLetter(leafIdentifier), out BaseTypes _))
+            return;
+        if (Enum.TryParse(leafIdentifier.Split('<')[0], out SystemCollectionsTypes _))
+        {
+            var s = leafIdentifier.Split('<')[1];
+            s = s.Remove(s.Length - 1);
+            if (!Enum.TryParse(CapitalizeFirstLetter(s), out BaseTypes _)
+                && !s.Contains(",") && !s.Contains("(") && !s.Contains(")"))
+                leafName = new TypeNameText
+                {
+                    Identifier = s,
+                    TypeArguments = ""
+                };
+        }
+        else
+            leafName = new TypeNameText
+            {
+                Identifier = leafIdentifier,
+                TypeArguments = ""
+            };
+
+        var rootName = TypeNameText.From(rootNode);
+        AddRelationship(leafName, rootName, symbol, "");
     }
 
     public void AddAssociationFrom(RecordDeclarationSyntax node, ParameterSyntax parameter, PlantUmlAssociationAttribute attribute)
@@ -184,6 +216,11 @@ public class RelationshipCollection : IEnumerable<Relationship>
         var relationship = new Relationship(rootName, leafName, symbol, attribute.RootLabel, attribute.LeafLabel, attribute.Label);
         if (!items.Contains(relationship))
             items.Add(relationship);
+        else if (items[items.IndexOf(relationship)].CompareTo(relationship) > 0)
+        {
+            items.Remove(relationship);
+            items.Add(relationship);
+        }
     }
 
     private void AddRelationship(TypeNameText leafName, TypeNameText rootName, string symbol, string nodeIdentifier)
@@ -191,6 +228,11 @@ public class RelationshipCollection : IEnumerable<Relationship>
         var relationship = new Relationship(rootName, leafName, symbol, "", nodeIdentifier + leafName.TypeArguments);
         if (!items.Contains(relationship))
             items.Add(relationship);
+        else if (items[items.IndexOf(relationship)].CompareTo(relationship) > 0)
+        {
+            items.Remove(relationship);
+            items.Add(relationship);
+        }
     }
 
     public IEnumerator<Relationship> GetEnumerator()
@@ -209,5 +251,15 @@ public class RelationshipCollection : IEnumerable<Relationship>
         {
             items.Remove(r);
         }
+    }
+    
+    private static string CapitalizeFirstLetter(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
+        if (input.Length == 1)
+            return char.ToUpper(input[0]) + "";
+
+        return char.ToUpper(input[0]) + input.Substring(1);
     }
 }

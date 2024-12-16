@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PlantUmlClassDiagramgenerator.Attributes\PlantUmlClassDiagramGenerator.Attributes.csproj" />
+    <ProjectReference Include="..\PlantUmlClassDiagramGenerator.SourceGenerator\PlantUmlClassDiagramGenerator.SourceGenerator.csproj" />
   </ItemGroup>
 
 </Project>

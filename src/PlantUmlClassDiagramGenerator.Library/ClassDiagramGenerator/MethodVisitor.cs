@@ -19,6 +19,11 @@ public partial class ClassDiagramGenerator
                 var associationAttr = CreateAssociationAttribute(associationAttrSyntax);
                 relationships.AddAssociationFrom(node, parameter, associationAttr);
             }
+            else
+            {
+                if (showMethodsAssociations)
+                    relationships.AddAssociationFrom(node, parameter);
+            }
         }
         var modifiers = GetMemberModifiersText(node.Modifiers,
             isInterfaceMember: node.Parent.IsKind(SyntaxKind.InterfaceDeclaration));

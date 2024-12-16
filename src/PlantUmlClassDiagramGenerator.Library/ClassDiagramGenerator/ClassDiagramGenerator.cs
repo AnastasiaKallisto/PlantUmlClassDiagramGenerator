@@ -19,7 +19,8 @@ public partial class ClassDiagramGenerator(
     bool removeSystemCollectionsAssociations = false,
     bool noGetSetForProperties = false,
     bool saveFields = false,
-    bool hideExternalAssociations = false) : CSharpSyntaxWalker
+    bool hideExternalAssociations = false,
+    bool showMethodsAssociations = false) : CSharpSyntaxWalker
 {
     public readonly HashSet<string> types = [];
     private readonly List<SyntaxNode> additionalTypeDeclarationNodes = [];
@@ -36,6 +37,7 @@ public partial class ClassDiagramGenerator(
     private readonly bool noGetSetForProperties = noGetSetForProperties;
     private readonly bool saveFields = saveFields;
     private readonly bool hideExternalAssociations = hideExternalAssociations;
+    private readonly bool showMethodsAssociations = showMethodsAssociations;
     private readonly Dictionary<string, string> escapeDictionary = new()
     {
         {@"(?<before>[^{]){(?<after>{[^{])", "${before}&#123;${after}"},

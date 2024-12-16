@@ -34,7 +34,10 @@ class Program
         ["-excludeUmlBeginEndTags"] = OptionType.Switch,
         ["-addPackageTags"] = OptionType.Switch,
         ["-removeSystemCollectionsAssociations"] = OptionType.Switch,
-        ["-noGetSetForProperties"] = OptionType.Switch
+        ["-noGetSetForProperties"] = OptionType.Switch,
+        ["-saveFields"] = OptionType.Switch,
+        ["-hideExternalAssociations"] = OptionType.Switch,
+        ["-showMethodsAssociations"] = OptionType.Switch
     };
 
     static int Main(string[] args)

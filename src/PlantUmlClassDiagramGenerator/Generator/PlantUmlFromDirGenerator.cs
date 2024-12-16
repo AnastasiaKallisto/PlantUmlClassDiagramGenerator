@@ -93,7 +93,8 @@ public class PlantUmlFromDirGenerator: IPlantUmlGenerator
                         parameters.ContainsKey("-removeSystemCollectionsAssociations"),
                         parameters.ContainsKey("-noGetSetForProperties"),
                         parameters.ContainsKey("-saveFields"),
-                        parameters.ContainsKey("-hideExternalAssociations"));
+                        parameters.ContainsKey("-hideExternalAssociations"),
+                        parameters.ContainsKey("-showMethodsAssociations"));
                     gen.Generate(root);
                     relationships.AddAll(gen.relationships);
                     types.AddRange(gen.types);
@@ -131,7 +132,11 @@ public class PlantUmlFromDirGenerator: IPlantUmlGenerator
             wordsToHighlight.AddRange(excessRelationships.Select(r => r.SubTypeName.Identifier));
             foreach (var word in wordsToHighlight.Distinct())
             {
-                includeRefs.Replace(word, "<b><color:#e50b0b>" + word + "</color></b>");
+                if (word == "T")
+                    continue;
+                var newWord = "<b><color:#e50b0b>" + word + "</color></b>";
+                includeRefs.Replace(": " + word, ": " + newWord);
+                includeRefs.Replace(":" + word, ":" + newWord);
             }
         }
 

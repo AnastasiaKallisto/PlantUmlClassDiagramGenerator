@@ -1,4 +1,6 @@
-﻿namespace PlantUmlClassDiagramGenerator.Library;
+﻿using PlantUmlClassDiagramGenerator.SourceGenerator.Associations;
+
+namespace PlantUmlClassDiagramGenerator.Library;
 
 public class Relationship(TypeNameText baseTypeName, TypeNameText subTypeName, string symbol, string baseLabel = "", string subLabel = "", string centerLabel = "")
 {
@@ -7,11 +9,16 @@ public class Relationship(TypeNameText baseTypeName, TypeNameText subTypeName, s
     protected string baseLabel = string.IsNullOrWhiteSpace(baseLabel) ? "" : $" \"{baseLabel}\"";
     protected string subLabel = string.IsNullOrWhiteSpace(subLabel) ? "" : $" \"{subLabel}\"";
     protected string centerLabel = string.IsNullOrWhiteSpace(centerLabel) ? "" : $" : \"{centerLabel}\"";
-    private readonly string symbol = symbol;
+    public string Symbol { get; } = symbol;
 
     public override string ToString()
     {
-        return $"{baseTypeName.Identifier}{baseLabel} {symbol}{subLabel} {SubTypeName.Identifier}{centerLabel}";
+        return $"{baseTypeName.Identifier}{baseLabel} {Symbol}{subLabel} {SubTypeName.Identifier}{centerLabel}";
+    }
+
+    public int CompareTo(Relationship other)
+    {
+        return AssociationComparer.Compare(Symbol, other.Symbol);
     }
 
     private bool Equals(Relationship other)
