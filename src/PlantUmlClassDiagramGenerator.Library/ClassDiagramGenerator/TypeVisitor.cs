@@ -24,7 +24,10 @@ public partial class ClassDiagramGenerator
         if (SkipInnerTypeDeclaration(node)) { return; }
 
         relationships.AddInnerclassRelationFrom(node);
-        relationships.AddInheritanceFrom(node);
+        if (removeSystemCollectionsAssociations)
+            relationships.AddInheritanceFromWithoutSystemTypes(node);
+        else
+            relationships.AddInheritanceFrom(node);
 
         var modifiers = GetTypeModifiersText(node.Modifiers);
         var keyword = (node.Modifiers.Any(SyntaxKind.AbstractKeyword) ? "abstract " : "")

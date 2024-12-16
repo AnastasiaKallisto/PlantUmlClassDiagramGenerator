@@ -16,7 +16,7 @@ public enum SystemCollectionsTypes
     SortedList,
     Stack,
     StructuralComparisons,
-    List, // Actually not SystemCollections but... meh
+    List,
     
     // structs
     DictionaryEntry,
@@ -32,5 +32,22 @@ public enum SystemCollectionsTypes
     IHashCodeProvider,
     IList,
     IStructuralComparable,
-    IStructuralEquatable
+    IStructuralEquatable,
+    IReadOnlyList,
+    Lazy,
+    
+    // something else
+    IReadOnlyDictionary,
+    IEditSession,
+    ISessionProviderFactory,
+    ILogger,
+    Logger,
+    Func,
+    IDbConnectionProvider,
+    ISystemSettingsService,
+    IConfigureServicesAction,
+    IConfigureAction,
+    IasJavaScriptModule,
+    IAsyncResourceFilter,
+    IReadOnlyCollection
 }

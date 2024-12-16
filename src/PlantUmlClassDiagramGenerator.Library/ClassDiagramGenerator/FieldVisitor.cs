@@ -48,7 +48,8 @@ public partial class ClassDiagramGenerator
                 else if (saveFields)
                 {
                     FillAssociatedField(field, modifiers, type);
-                    relationships.AddAssociationFromWithNoLabel(node, field);
+                    if (removeSystemCollectionsAssociations && !Enum.TryParse(type.ToString(), out IgnoredTypes _))
+                        relationships.AddAssociationFromWithNoLabel(node, field);
                 } else
                     relationships.AddAssociationFrom(node, field);
             }
@@ -89,9 +90,13 @@ public partial class ClassDiagramGenerator
         else
         {
             FillAssociatedField(field, modifiers, type);
+            var s0 = type.ToString().Split('<')[0];
             var s = type.ToString().Split('<')[1];
             s = s.Remove(s.Length - 1);
-            if (!Enum.TryParse(CapitalizeFirstLetter(s), out BaseTypes _))
+            if (!Enum.TryParse(CapitalizeFirstLetter(s), out BaseTypes _)
+                && !s.Contains(",") && !s.Contains("(") && !s.Contains(")")
+                && !s0.Equals("ILogger") 
+                && !s0.Equals("Logger"))
                 relationships.AddAssociationFrom(node, new PlantUmlAssociationAttribute()
                 {
                     Association = "o--",

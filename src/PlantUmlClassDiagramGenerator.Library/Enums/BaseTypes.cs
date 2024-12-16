@@ -21,6 +21,7 @@ public enum BaseTypes
     Dynamic,
     DateTime,
     TimeSpan,
-    Guid
+    Guid,
+    Action
 }
 

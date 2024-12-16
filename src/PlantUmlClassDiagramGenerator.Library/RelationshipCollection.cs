@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PlantUmlClassDiagramGenerator.Attributes;
+using PlantUmlClassDiagramGenerator.Library.Enums;
 
 namespace PlantUmlClassDiagramGenerator.Library;
 
@@ -30,6 +32,21 @@ public class RelationshipCollection : IEnumerable<Relationship>
             if (typeStntax.Type is not SimpleNameSyntax typeNameSyntax) continue;
             var baseTypeName = TypeNameText.From(typeNameSyntax);
             items.Add(new Relationship(baseTypeName, subTypeName, "<|--", baseTypeName.TypeArguments));
+        }
+    }
+    
+    public void AddInheritanceFromWithoutSystemTypes(TypeDeclarationSyntax syntax)
+    {
+        if (syntax.BaseList == null) return;
+
+        var subTypeName = TypeNameText.From(syntax);
+
+        foreach (var typeStntax in syntax.BaseList.Types)
+        {
+            if (typeStntax.Type is not SimpleNameSyntax typeNameSyntax) continue;
+            var baseTypeName = TypeNameText.From(typeNameSyntax);
+            if (!Enum.TryParse(baseTypeName.Identifier, out SystemCollectionsTypes _) && !Enum.TryParse(baseTypeName.Identifier, out IgnoredTypes _))
+                items.Add(new Relationship(baseTypeName, subTypeName, "<|--", baseTypeName.TypeArguments));
         }
     }
 
