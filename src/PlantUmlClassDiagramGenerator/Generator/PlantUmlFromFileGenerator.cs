@@ -56,7 +56,9 @@ public class PlantUmlFromFileGenerator : IPlantUmlGenerator
                 parameters.ContainsKey("-excludeUmlBeginEndTags"),
                 false,
                 parameters.ContainsKey("-removeSystemCollectionsAssociations"),
-                parameters.ContainsKey("-noGetSetForProperties"));
+                parameters.ContainsKey("-noGetSetForProperties"),
+                parameters.ContainsKey("-saveFields"),
+                false);
             gen.Generate(root);
         }
         catch (Exception e)

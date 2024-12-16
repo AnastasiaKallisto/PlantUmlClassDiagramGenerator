@@ -202,4 +202,12 @@ public class RelationshipCollection : IEnumerable<Relationship>
     {
         return GetEnumerator();
     }
+
+    public void RemoveAll(IEnumerable<Relationship> relationships)
+    {
+        foreach (var r in relationships)
+        {
+            items.Remove(r);
+        }
+    }
 }

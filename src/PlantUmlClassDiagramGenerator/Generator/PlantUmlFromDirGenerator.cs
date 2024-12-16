@@ -63,6 +63,8 @@ public class PlantUmlFromDirGenerator: IPlantUmlGenerator
         var error = false;
         var filesToProcess = ExcludeFileFilter.GetFilesToProcess(files, excludePaths, inputRoot);
         RelationshipCollection relationships = new();
+        List<string> types = new();
+        List<string> wordsToHighlight = new();
         foreach (var inputFile in filesToProcess)
         {
             Console.WriteLine($"Processing \"{inputFile}\"...");
@@ -90,9 +92,11 @@ public class PlantUmlFromDirGenerator: IPlantUmlGenerator
                         parameters.ContainsKey("-addPackageTags"),
                         parameters.ContainsKey("-removeSystemCollectionsAssociations"),
                         parameters.ContainsKey("-noGetSetForProperties"),
-                        parameters.ContainsKey("-saveFields"));
+                        parameters.ContainsKey("-saveFields"),
+                        parameters.ContainsKey("-hideExternalAssociations"));
                     gen.Generate(root);
                     relationships.AddAll(gen.relationships);
+                    types.AddRange(gen.types);
                 }
 
                 if (parameters.ContainsKey("-allInOne"))
@@ -117,6 +121,17 @@ public class PlantUmlFromDirGenerator: IPlantUmlGenerator
             {
                 Console.WriteLine(e);
                 error = true;
+            }
+        }
+        
+        if (parameters.ContainsKey("-hideExternalAssociations"))
+        {
+            var excessRelationships = relationships.Where(r => !types.Contains(r.SubTypeName.Identifier)).ToArray();
+            relationships.RemoveAll(excessRelationships);
+            wordsToHighlight.AddRange(excessRelationships.Select(r => r.SubTypeName.Identifier));
+            foreach (var word in wordsToHighlight.Distinct())
+            {
+                includeRefs.Replace(word, "<b><color:#e50b0b>" + word + "</color></b>");
             }
         }
 

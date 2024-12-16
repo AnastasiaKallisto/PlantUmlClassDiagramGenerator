@@ -3,7 +3,7 @@
 public class Relationship(TypeNameText baseTypeName, TypeNameText subTypeName, string symbol, string baseLabel = "", string subLabel = "", string centerLabel = "")
 {
     protected TypeNameText baseTypeName = baseTypeName;
-    protected TypeNameText subTypeName = subTypeName;
+    public TypeNameText SubTypeName { get; } = subTypeName;
     protected string baseLabel = string.IsNullOrWhiteSpace(baseLabel) ? "" : $" \"{baseLabel}\"";
     protected string subLabel = string.IsNullOrWhiteSpace(subLabel) ? "" : $" \"{subLabel}\"";
     protected string centerLabel = string.IsNullOrWhiteSpace(centerLabel) ? "" : $" : \"{centerLabel}\"";
@@ -11,13 +11,13 @@ public class Relationship(TypeNameText baseTypeName, TypeNameText subTypeName, s
 
     public override string ToString()
     {
-        return $"{baseTypeName.Identifier}{baseLabel} {symbol}{subLabel} {subTypeName.Identifier}{centerLabel}";
+        return $"{baseTypeName.Identifier}{baseLabel} {symbol}{subLabel} {SubTypeName.Identifier}{centerLabel}";
     }
 
     private bool Equals(Relationship other)
     {
         return Equals(baseTypeName, other.baseTypeName) 
-               && Equals(subTypeName, other.subTypeName) 
+               && Equals(SubTypeName, other.SubTypeName) 
                && Equals(baseLabel, other.baseLabel)
                && Equals(subLabel, other.subLabel);
     }
@@ -35,7 +35,7 @@ public class Relationship(TypeNameText baseTypeName, TypeNameText subTypeName, s
         unchecked
         {
             var hashCode = (baseTypeName != null ? baseTypeName.GetHashCode() : 0);
-            hashCode = (hashCode * 397) ^ (subTypeName != null ? subTypeName.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (SubTypeName != null ? SubTypeName.GetHashCode() : 0);
             hashCode = (hashCode * 397) ^ (baseLabel != null ? baseLabel.GetHashCode() : 0);
             hashCode = (hashCode * 397) ^ (subLabel != null ? subLabel.GetHashCode() : 0);
             return hashCode;
