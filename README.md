@@ -11,6 +11,7 @@ This is a generator to create a class-diagram of PlantUML from the C# source cod
 
 | Version | Commit                                                                                                              | Comment                                                                                                      |
 |---------|---------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| 1.6     | [2291da7](https://github.com/AnastasiaKallisto/PlantUmlClassDiagramGenerator/commit/2291da74b298e81329d33aaf8b06ed09c92cd148) | Add "-hideExternalAssociations" option                                                                       |
 | 1.5     | [d92afc6](https://github.com/AnastasiaKallisto/PlantUmlClassDiagramGenerator/commit/d92afc66bfd328c229aad82e9a22b3988727a4e1) | Add "-saveFields" option                                                                                     |
 | 1.4     | [ebc52e8](https://github.com/AnastasiaKallisto/PlantUmlClassDiagramGenerator/commit/ebc52e88f4719d28948f881de67796fc71c88cbd) | Add "-noGetSetForProperties" option                                                                          |
 | 1.3     | [d97e179](https://github.com/AnastasiaKallisto/PlantUmlClassDiagramGenerator/commit/d97e17911111f27906d2a5a3eeb3f8137ebdb979) | Add "-removeSystemCollectionsAssociations" option                                                            |
@@ -54,6 +55,7 @@ puml-gen InputPath [OutputPath] [-dir] [-addPackageTags] [-public | -ignore Igno
 - **-removeSystemCollectionsAssociations**: (Optional) If there are properties or fields like "IList<T>" and other SystemCollections, there will be no relation with IList, but  relation with T will be shown, if it isn't base type (string, int ...)
 - **-noGetSetForProperties**: (Optional) Removes <\<get>> and <\<set>> for properties in classes
 - **-saveFields**: (Optional) Saves all fields when -createAssociation is used. Associations will be without labels.
+- **-hideExternalAssociations**: (Optional) Works with **-addPackageTags**. All associations that were built on fields and properties, which depend on external classes and interfaces, will be not shown in include.puml. Instead, these types will be colored red everywhere.
 - **-public:** (Optional) If specified, only public accessibility members are output. 
 - **-ignore:** (Optional) Specify the accessibility of members to ignore, with a comma separated list.
 - **-excludePaths:** (Optional) Specify the exclude file and directory.   
