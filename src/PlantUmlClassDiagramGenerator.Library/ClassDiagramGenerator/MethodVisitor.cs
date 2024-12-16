@@ -25,7 +25,10 @@ public partial class ClassDiagramGenerator
         var name = node.Identifier.ToString();
         var returnType = node.ReturnType.ToString();
         var args = node.ParameterList.Parameters.Select(p => $"{p.Identifier}:{p.Type}");
+        var argsString = string.Join(", ", args);
+        if (argsString.Length > 100)
+            argsString = string.Join(",\\n", args);
 
-        WriteLine($"{modifiers}{name}({string.Join(", ", args)}) : {returnType}");
+        WriteLine($"{modifiers}{name}({argsString}) : {returnType}");
     }
 }

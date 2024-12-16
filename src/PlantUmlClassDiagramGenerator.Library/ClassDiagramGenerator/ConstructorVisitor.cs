@@ -24,7 +24,10 @@ public partial class ClassDiagramGenerator
             isInterfaceMember: node.Parent.IsKind(SyntaxKind.InterfaceDeclaration));
         var name = node.Identifier.ToString();
         var args = node.ParameterList.Parameters.Select(p => $"{p.Identifier}:{p.Type}");
+        var argsString = string.Join(", ", args);
+        if (argsString.Length > 100)
+            argsString = string.Join(",\\n", args);
 
-        WriteLine($"{modifiers}{name}({string.Join(", ", args)})");
+        WriteLine($"{modifiers}{name}({argsString})");
     }
 }
