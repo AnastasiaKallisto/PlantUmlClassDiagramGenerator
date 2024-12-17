@@ -9,14 +9,16 @@ public static class AssociationComparer
         { AssociationNode.Composition.Node, 3 },
         { AssociationNode.Aggregation.Node, 4 },
         { AssociationNode.Nest.Node, 5 },
-        { AssociationNode.Association.Node, 6 },
-        { AssociationNode.Dependency.Node, 7 },
-        {".[#blue,thickness=3].>", 8 },
-        {".[#red,thickness=4].>", 9}
+        { "-->", 6 },
+        { AssociationNode.Association.Node, 7 },
+        { AssociationNode.Dependency.Node, 8 },
+        {".[#green,thickness=3].>", 9},
+        {".[#blue,thickness=3].>", 10 },
+        {".[#red,thickness=4].>", 11}
     };
 
     public static int Compare(string a, string b)
     {
-        return -1*Order[a].CompareTo(Order[b]);
+        return Order[a].CompareTo(Order[b]);
     }
 }

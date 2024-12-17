@@ -129,6 +129,10 @@ public class PlantUmlFromDirGenerator: IPlantUmlGenerator
         {
             var excessRelationships = relationships.Where(r => !types.Contains(r.SubTypeName.Identifier)).ToArray();
             relationships.RemoveAll(excessRelationships);
+            foreach (var relationship in excessRelationships)
+            {
+                includeRefs.Replace("\n" + relationship, "\n");
+            }
             wordsToHighlight.AddRange(excessRelationships.Select(r => r.SubTypeName.Identifier));
             foreach (var word in wordsToHighlight.Distinct())
             {

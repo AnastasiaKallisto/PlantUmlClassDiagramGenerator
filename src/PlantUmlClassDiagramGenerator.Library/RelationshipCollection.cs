@@ -141,7 +141,7 @@ public class RelationshipCollection : IEnumerable<Relationship>
     {
         if (node.Parent is not BaseTypeDeclarationSyntax rootNode) return;
         var symbol = ".[#blue,thickness=3].>";
-        TypeNameText leafName = null;
+        TypeNameText leafName;
         var leafIdentifier = parameter.Type.ToString();
         if (Enum.TryParse(leafIdentifier, out IgnoredTypes _)
             || Enum.TryParse(CapitalizeFirstLetter(leafIdentifier), out BaseTypes _))
@@ -159,14 +159,16 @@ public class RelationshipCollection : IEnumerable<Relationship>
                 };
         }
         else
+        {
             leafName = new TypeNameText
             {
                 Identifier = leafIdentifier,
                 TypeArguments = ""
             };
-
-        var rootName = TypeNameText.From(rootNode);
-        AddRelationship(leafName, rootName, symbol, "");
+            var rootName = TypeNameText.From(rootNode);
+            AddRelationship(leafName, rootName, symbol, "");
+        }
+            
     }
 
     public void AddAssociationFrom(RecordDeclarationSyntax node, ParameterSyntax parameter, PlantUmlAssociationAttribute attribute)
@@ -185,6 +187,53 @@ public class RelationshipCollection : IEnumerable<Relationship>
         if (leafName is null) { return; }
         var rootName = TypeNameText.From(rootNode);
         AddRelationship(attribute, leafName, rootName);
+    }
+    
+    
+    public void AddAssociationFrom(ConstructorDeclarationSyntax node, ParameterSyntax parameter)
+    {
+        if (node.Parent is not BaseTypeDeclarationSyntax rootNode) return;
+        var symbol = ".[#green,thickness=3].>";
+        TypeNameText leafName = null;
+        TypeNameText rootName = null;
+        var leafIdentifier = parameter.Type.ToString();
+        if (Enum.TryParse(leafIdentifier, out IgnoredTypes _)
+            || Enum.TryParse(CapitalizeFirstLetter(leafIdentifier), out BaseTypes _))
+            return;
+        var s0 = leafIdentifier.Split('<')[0];
+        if (Enum.TryParse(s0, out SystemCollectionsTypes _))
+        {
+            if (leafIdentifier.Contains("<"))
+            {
+                var s = leafIdentifier.Split('<')[1];
+                s = s.Remove(s.Length - 1);
+                if (!Enum.TryParse(CapitalizeFirstLetter(s), out BaseTypes _)
+                    && !s.Contains(",") && !s.Contains("(") && !s.Contains(")"))
+                {
+                    rootName = TypeNameText.From(rootNode);
+                    if (rootName.Identifier.Equals(s) 
+                        && (s0.Equals("ILogger") || s0.Equals("Logger") || (s0.Equals("IOptions") && s.Equals(rootName))))
+                        return;
+                    leafName = new TypeNameText
+                    {
+                        Identifier = s,
+                        TypeArguments = ""
+                    };
+                    AddRelationship(leafName, rootName, symbol, "");
+                }
+            }
+        }
+        else
+        {
+            leafName = new TypeNameText
+            {
+                Identifier = leafIdentifier,
+                TypeArguments = ""
+            };
+            rootName = TypeNameText.From(rootNode);
+            AddRelationship(leafName, rootName, symbol, "");
+        }
+            
     }
 
     public void AddAssociationFrom(FieldDeclarationSyntax node, PlantUmlAssociationAttribute attribute)
@@ -260,6 +309,6 @@ public class RelationshipCollection : IEnumerable<Relationship>
         if (input.Length == 1)
             return char.ToUpper(input[0]) + "";
 
-        return char.ToUpper(input[0]) + input.Substring(1);
+        return char.ToUpper(input[0]) + input.Substring(1).Replace("?", "");
     }
 }

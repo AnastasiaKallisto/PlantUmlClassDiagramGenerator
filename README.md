@@ -55,7 +55,7 @@ puml-gen InputPath [OutputPath] [-dir] [-addPackageTags] [-public | -ignore Igno
 - **-removeSystemCollectionsAssociations**: (Optional) If there are properties or fields like "IList<T>" and other SystemCollections, there will be no relation with IList, but  relation with T will be shown, if it isn't base type (string, int ...)
 - **-noGetSetForProperties**: (Optional) Removes <\<get>> and <\<set>> for properties in classes
 - **-saveFields**: (Optional) Saves all fields when -createAssociation is used. Associations will be without labels.
-- **-hideExternalAssociations**: (Optional) Works with **-addPackageTags**. All associations that were built on fields and properties, which depend on external classes and interfaces, will be not shown in include.puml. Instead, these types will be colored red everywhere.
+- **-hideExternalAssociations**: (Optional) All associations that were built on fields and properties, which depend on external classes and interfaces, will be not shown in include.puml. Instead, these types will be colored red everywhere.
 - **-public:** (Optional) If specified, only public accessibility members are output. 
 - **-ignore:** (Optional) Specify the accessibility of members to ignore, with a comma separated list.
 - **-excludePaths:** (Optional) Specify the exclude file and directory.   

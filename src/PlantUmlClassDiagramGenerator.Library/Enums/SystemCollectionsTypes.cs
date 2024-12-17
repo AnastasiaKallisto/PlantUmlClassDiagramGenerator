@@ -42,6 +42,7 @@ public enum SystemCollectionsTypes
     ISessionProviderFactory,
     ILogger,
     Logger,
+    IOptions,
     Func,
     IDbConnectionProvider,
     ISystemSettingsService,

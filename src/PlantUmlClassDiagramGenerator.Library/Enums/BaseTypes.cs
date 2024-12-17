@@ -22,6 +22,7 @@ public enum BaseTypes
     DateTime,
     TimeSpan,
     Guid,
-    Action
+    Action,
+    T
 }
 
