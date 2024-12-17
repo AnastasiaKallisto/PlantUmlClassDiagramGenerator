@@ -66,7 +66,7 @@ public partial class ClassDiagramGenerator
 
     private void ProcessWithoutSystemCollections(PropertyDeclarationSyntax node, TypeSyntax type, TypeSyntax typeIgnoringNullable)
     {
-        var t = node.Type.ToString().Split('<')[0];
+        var t = TypeDeterminator.GetWordBeforeAngleBracket(node.Type.ToString());
         if (!Enum.TryParse(t, out SystemCollectionsTypes _))
         {
             additionalTypeDeclarationNodes.Add(type);
@@ -75,13 +75,12 @@ public partial class ClassDiagramGenerator
         else
         {
             FillAssociatedProperty(node, type);
-            var s0 = type.ToString().Split('<')[0];
             var s = node.Type.ToString();
-            s = s.Substring(s.IndexOf('<') + 1, s.LastIndexOf('>') - s.IndexOf('<') - 1);
+            s = TypeDeterminator.GetWordInAngleBrackets(s);
             if (!Enum.TryParse(CapitalizeFirstLetter(s), out BaseTypes _)
                 && !s.Contains(",") && !s.Contains("(") && !s.Contains(")")
-                && !s0.Equals("ILogger") 
-                && !s0.Equals("Logger"))
+                && !t.Equals("ILogger") 
+                && !t.Equals("Logger"))
                 relationships.AddAssociationFrom(node, new PlantUmlAssociationAttribute()
                 {
                     Association = "o--",

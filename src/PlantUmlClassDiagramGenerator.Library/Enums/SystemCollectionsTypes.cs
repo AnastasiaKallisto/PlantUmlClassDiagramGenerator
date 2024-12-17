@@ -10,7 +10,9 @@ public enum SystemCollectionsTypes
     CollectionBase,
     Comparer,
     DictionaryBase,
+    Dictionary,
     Hashtable,
+    HashSet,
     Queue,
     ReadOnlyCollectionBase,
     SortedList,
@@ -23,6 +25,8 @@ public enum SystemCollectionsTypes
 
     // interfaces
     ICollection,
+    ISet,
+    IImmutableSet,
     IComparer,
     IDictionary,
     IDictionaryEnumerator,
